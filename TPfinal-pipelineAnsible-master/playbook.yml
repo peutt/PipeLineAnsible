@@ -1,0 +1,33 @@
+---
+- name: install Nginx et git
+  hosts: inventory
+  gather_facts: yes
+  become: yes
+
+  tasks: 
+    - name: "apt-get update"
+      apt:
+         update_cache: yes
+         
+    - name: Installation Nginx 
+      apt: 
+        name: ['nginx']
+        update_cache: yes
+
+    - name: Install git
+      apt: 
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Depot git
+      git:
+        repo: https://github.com/peutt/PipeLineAnsible.git
+        dest: /var/www/html/
+        clone: yes
+
+  hanlers:
+    - name: restart Nginx
+      service: 
+        name: nginx
+        state: restarted
